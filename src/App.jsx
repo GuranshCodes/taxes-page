@@ -53,10 +53,17 @@ const AuthenticatedApp = () => {
     }
   }
 
-  // 🔥 Normal routes
+// 🔥 Normal routes
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/taxes-about" element={<TaxesAbout />} />
+      <Route path="/taxes-save" element={<TaxesSave />} />
+      <Route path="/taxes-business" element={<TaxesBusiness />} />
+      <Route path="/games" element={<TaxesGameHub />} />
+      <Route path="/games/treasure" element={<GameTreasureHunt />} />
+      <Route path="/games/credit-catcher" element={<GameCreditCatcher />} />
+      <Route path="/games/quiz-sprint" element={<GameQuizSprint />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   )
