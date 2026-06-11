@@ -40,7 +40,7 @@ export default function TaxesAbout() {
               About <span className="text-primary">Taxes</span>
             </h1>
             <p className="mt-8 text-lg text-muted-foreground max-w-xl leading-relaxed">
-              Everything you need to know about how taxes work, who pays them,
+              Everything you need to know about how taxes work in Canada, who pays them,
               and why they're essential to a functioning society.
             </p>
           </motion.div>
@@ -52,23 +52,24 @@ export default function TaxesAbout() {
         <TaxesSectionCallout
           imgSrc="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900&q=80"
           imgAlt="Tax calculation"
-          caption="The progressive tax system ensures fairness across income levels"
+          caption="Canada's progressive tax system ensures fairness across income levels"
         >
           <h3 className="font-display font-semibold text-xl mb-4">The Progressive Tax System</h3>
           <p className="text-muted-foreground leading-relaxed mb-4">
-            The U.S. uses a progressive tax system, meaning tax rates increase as income rises. 
+            Canada uses a progressive tax system, meaning tax rates increase as income rises.
             But here's the key: each rate only applies to income within that specific bracket.
           </p>
           <p className="text-muted-foreground leading-relaxed mb-6">
-            If you earn $50,000, you don't pay 22% on all of it. You pay 10% on the first $11,600, 
-            12% on the next portion, and only 22% on the amount above $47,150.
+            If you earn $50,000, you don't pay 20.5% on all of it. You pay 15% on the first $55,867,
+            and only 20.5% on income above that threshold. Ontario also adds its own provincial tax on top.
           </p>
           <div className="space-y-3">
             {[
-              { bracket: "$0 – $11,600", rate: "10%" },
-              { bracket: "$11,601 – $47,150", rate: "12%" },
-              { bracket: "$47,151 – $100,525", rate: "22%" },
-              { bracket: "$100,526 – $191,950", rate: "24%" },
+              { bracket: "$0 – $55,867", rate: "15% federal" },
+              { bracket: "$55,868 – $111,733", rate: "20.5% federal" },
+              { bracket: "$111,734 – $154,906", rate: "26% federal" },
+              { bracket: "$154,907 – $220,000", rate: "29% federal" },
+              { bracket: "Over $220,000", rate: "33% federal" },
             ].map((b) => (
               <div key={b.bracket} className="flex justify-between items-center py-2 border-b border-border/30">
                 <span className="text-sm text-muted-foreground">{b.bracket}</span>
@@ -87,16 +88,16 @@ export default function TaxesAbout() {
         <TaxesSectionCallout
           imgSrc="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=900&q=80"
           imgAlt="City infrastructure funded by taxes"
-          caption="Tax revenue builds and maintains the infrastructure of society"
+          caption="Tax revenue builds and maintains the infrastructure of Canadian society"
           reverse
         >
           <div className="space-y-6">
             {[
-              { label: "Social Security & Medicare", pct: "33%", desc: "Retirement benefits and healthcare for seniors." },
-              { label: "National Defense", pct: "15%", desc: "Military and national security operations." },
-              { label: "Safety Net Programs", pct: "13%", desc: "Food assistance, housing, and aid for low-income families." },
-              { label: "Interest on Debt", pct: "10%", desc: "Paying interest on money the government has borrowed." },
-              { label: "Everything Else", pct: "29%", desc: "Education, infrastructure, science, transportation, and more." },
+              { label: "Healthcare", pct: "25%", desc: "Funding hospitals, OHIP, and public health programs across Ontario." },
+              { label: "Education", pct: "20%", desc: "Public schools, colleges, universities, and student aid." },
+              { label: "Social Services", pct: "18%", desc: "Employment Insurance, CPP, housing assistance, and family benefits." },
+              { label: "Infrastructure", pct: "15%", desc: "Roads, transit, bridges, and public utilities." },
+              { label: "Everything Else", pct: "22%", desc: "Defence, environment, science, Indigenous services, and more." },
             ].map((item) => (
               <div key={item.label} className="flex gap-4">
                 <span className="font-display font-bold text-lg text-primary w-12 flex-shrink-0">{item.pct}</span>

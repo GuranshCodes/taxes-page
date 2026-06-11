@@ -14,9 +14,8 @@ const keyLessons = [
   "Starting early with financial literacy gives you decades of compound advantage.",
   "Every dollar saved on taxes through legal deductions is a dollar that works for you.",
   "Filing taxes on time avoids penalties and keeps your financial record clean.",
-  "Tax credits are more powerful than deductions — they reduce your bill dollar-for-dollar.",
+  "Tax credits are more powerful than deductions they reduce your bill dollar for dollar.",
 ];
-
 export default function Home() {
   return (
     <div className="min-h-screen bg-background">
@@ -30,9 +29,9 @@ export default function Home() {
           caption="Understanding the tax system is the foundation of financial literacy"
         >
           <p className="text-muted-foreground leading-relaxed mb-6">
-            Taxes are mandatory payments that individuals and businesses make to the government. 
-            They fund essential public services — from the roads you drive on to the schools you attend,
-            from emergency services to national defense.
+           Taxes are mandatory payments that individuals and businesses make to the government. 
+           They fund essential public services from the roads you drive on to the schools you attend,
+           from emergency services to national defense.
           </p>
           <p className="text-muted-foreground leading-relaxed">
             Think of taxes as your contribution to the shared resources everyone uses. Understanding 
@@ -50,7 +49,7 @@ export default function Home() {
         <div className="mb-8">
           <p className="text-muted-foreground leading-relaxed max-w-2xl">
             The best way to learn about money is by doing. Jump into our interactive games
-            designed to teach tax concepts, financial decision-making, and smart money habits.
+            designed to teach tax concepts, financial decision making, and smart money habits.
           </p>
         </div>
         <TaxesGameCards />
@@ -86,7 +85,7 @@ export default function Home() {
           className="mt-20 max-w-3xl"
         >
           <p className="text-lg text-muted-foreground leading-relaxed italic border-l-2 border-primary/30 pl-6">
-            Learning about taxes and money management is more than a school subject — it's a life skill 
+            Learning about taxes and money management is more than a school subject it's a life skill 
             that shapes your ability to achieve financial independence. The earlier you start, the further 
             ahead you'll be.
           </p>
