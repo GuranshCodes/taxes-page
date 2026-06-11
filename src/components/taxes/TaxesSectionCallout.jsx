@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 
+/** @param {{ imgSrc: string, imgAlt: string, caption?: string, children: React.ReactNode, reverse?: boolean }} props */
 export default function TaxesSectionCallout({ imgSrc, imgAlt, caption, children, reverse = false }) {
   return (
     <motion.div
