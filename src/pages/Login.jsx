@@ -1,9 +1,6 @@
-// @ts-nocheck
+const db = globalThis.__B44_DB__ || { auth:{ isAuthenticated: async()=>false, me: async()=>null }, entities:new Proxy({}, { get:()=>({ filter:async()=>[], get:async()=>null, create:async()=>({}), update:async()=>({}), delete:async()=>({}) }) }), integrations:{ Core:{ UploadFile:async()=>({ file_url:'' }) } } };
+
 import React, { useState } from "react";
-
-// Fix TS noImplicitAny for this .jsx file (keeps runtime unchanged)
-
-
 import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
@@ -11,20 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LogIn, Mail, Lock, Loader2 } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
-import ProviderIcon from "@/components/ProviderIcon";
-
-// ✅ SAFE MOCK DB (no crashing)
-const db = globalThis.__APP_DB__ || {
-  auth: {
-    loginViaEmailPassword: async () => {
-      // simulate login success
-      return { user: { email: "demo@user.com" } };
-    },
-    loginWithProvider: async () => {
-      return { user: { provider: "nvidia" } };
-    },
-  },
-};
+import GoogleIcon from "@/components/GoogleIcon";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -36,31 +20,18 @@ export default function Login() {
     e.preventDefault();
     setError("");
     setLoading(true);
-
     try {
       await db.auth.loginViaEmailPassword(email, password);
-
-      // ✅ fake successful login redirect
       window.location.href = "/";
-    } catch {
-      setError("Login failed");
+    } catch (err) {
+      setError(err.message || "Invalid email or password");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleProviderLogin = async () => {
-    setError("");
-    setLoading(true);
-
-    try {
-      await db.auth.loginWithProvider("nvidia", "/");
-      window.location.href = "/";
-    } catch {
-      setError("Provider login failed");
-    } finally {
-      setLoading(false);
-    }
+  const handleGoogle = () => {
+    db.auth.loginWithProvider("google", "/");
   };
 
   return (
@@ -80,10 +51,10 @@ export default function Login() {
       <Button
         variant="outline"
         className="w-full h-12 text-sm font-medium mb-6"
-        onClick={handleProviderLogin}
+        onClick={handleGoogle}
       >
-        <ProviderIcon className="w-5 h-5 mr-2" />
-        Continue with Nvidia
+        <GoogleIcon className="w-5 h-5 mr-2" />
+        Continue with Google
       </Button>
 
       <div className="relative mb-6">
@@ -105,10 +76,12 @@ export default function Login() {
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
           <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
             <Input
               id="email"
               type="email"
+              autoComplete="email"
+              autoFocus
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -117,14 +90,19 @@ export default function Login() {
             />
           </div>
         </div>
-
         <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="password">Password</Label>
+            <Link to="/forgot-password" className="text-xs text-primary hover:underline">
+              Forgot password?
+            </Link>
+          </div>
           <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" aria-hidden="true" />
             <Input
               id="password"
               type="password"
+              autoComplete="current-password"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -133,7 +111,6 @@ export default function Login() {
             />
           </div>
         </div>
-
         <Button type="submit" className="w-full h-12 font-medium" disabled={loading}>
           {loading ? (
             <>

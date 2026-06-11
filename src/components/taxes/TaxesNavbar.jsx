@@ -1,109 +1,99 @@
-import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, Sparkles } from 'lucide-react';
-import { useTheme } from '@/lib/ThemeContext';
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Menu, X, DollarSign } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
-const NAV = [
-  { label: 'Home', to: '/' },
-  { label: 'What are taxes?', to: '/taxes-about' },
-  { label: 'How to save', to: '/taxes-save' },
-  { label: 'Business write-offs', to: '/taxes-business' },
-  { label: 'Games', to: '/games' },
+const navLinks = [
+  { label: "Home", path: "/" },
+  { label: "About Taxes", path: "/taxes-about" },
+  { label: "Save Money", path: "/taxes-save" },
+  { label: "Business", path: "/taxes-business" },
+  { label: "Games", path: "/games" },
 ];
 
 export default function TaxesNavbar() {
-  const [open, setOpen] = React.useState(false);
-  const { dark, setDark } = useTheme();
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => setMobileOpen(false), [location]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b-2 border-foreground bg-background/90 backdrop-blur">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg border-2 border-foreground bg-foreground text-background flex items-center justify-center">
-              <Sparkles size={18} />
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled
+          ? "bg-background/90 backdrop-blur-xl border-b border-border/50"
+          : "bg-transparent"
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 lg:h-20">
+          <Link to="/" className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-lg bg-primary/20 flex items-center justify-center group-hover:bg-primary/30 transition-colors">
+              <DollarSign className="w-5 h-5 text-primary" />
             </div>
-            <div className="leading-tight">
-              <div className="font-heading font-black text-sm uppercase tracking-[-0.03em]">
-                TAX QUEST
-              </div>
-              <div className="text-[11px] font-mono text-muted-foreground">Grade 8 mode</div>
-            </div>
+            <span className="font-display font-bold text-lg text-foreground tracking-tight">
+              Money<span className="text-primary">Wise</span>
+            </span>
+          </Link>
+
+          <div className="hidden lg:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
+                  location.pathname === link.path
+                    ? "text-primary bg-primary/10"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
 
-          <div className="hidden md:flex items-center gap-1">
-            {NAV.map((item) => {
-              const active = item.to === '/' ? location.pathname === '/' : location.pathname.startsWith(item.to);
-              return (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  className={
-                    'px-3 py-2 text-xs font-mono uppercase tracking-wider border-l-2 border-transparent hover:border-foreground hover:text-foreground transition-colors ' +
-                    (active ? 'border-foreground text-foreground bg-foreground/5' : 'text-muted-foreground')
-                  }
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setDark(!dark)}
-              className="hidden sm:flex w-9 h-9 items-center justify-center border-2 border-foreground hover:bg-foreground hover:text-background transition-colors"
-              aria-label="Toggle dark mode"
-            >
-              {dark ? '☀️' : '🌙'}
-            </button>
-
-            <button
-              className="md:hidden p-2 border-2 border-foreground hover:bg-foreground hover:text-background transition-colors"
-              onClick={() => setOpen((s) => !s)}
-              aria-label="Toggle menu"
-            >
-              {open ? <X size={18} /> : <Menu size={18} />}
-            </button>
-
-            <button
-              className="sm:hidden w-9 h-9 items-center justify-center border-2 border-foreground hover:bg-foreground hover:text-background transition-colors"
-              onClick={() => setDark(!dark)}
-              aria-label="Toggle dark mode"
-            >
-              {dark ? '☀️' : '🌙'}
-            </button>
-          </div>
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="lg:hidden p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors"
+          >
+            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
-
-        {open && (
-          <div className="md:hidden pb-4">
-            <div className="border-t-2 border-foreground pt-3 grid gap-2">
-              {NAV.map((item) => {
-                const active = item.to === '/' ? location.pathname === '/' : location.pathname.startsWith(item.to);
-                return (
-                  <button
-                    key={item.to}
-                    onClick={() => {
-                      setOpen(false);
-                      navigate(item.to);
-                    }}
-                    className={
-                      'w-full text-left px-3 py-3 text-xs font-mono uppercase tracking-wider border-2 border-foreground/0 hover:border-foreground transition-colors ' +
-                      (active ? 'bg-foreground text-background' : 'bg-background text-muted-foreground')
-                    }
-                  >
-                    {item.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
       </div>
+
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="lg:hidden bg-background/95 backdrop-blur-xl border-b border-border/50 overflow-hidden"
+          >
+            <div className="px-6 py-4 space-y-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                    location.pathname === link.path
+                      ? "text-primary bg-primary/10"
+                      : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }
-

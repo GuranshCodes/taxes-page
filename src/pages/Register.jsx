@@ -1,3 +1,5 @@
+const db = globalThis.__B44_DB__ || { auth:{ isAuthenticated: async()=>false, me: async()=>null }, entities:new Proxy({}, { get:()=>({ filter:async()=>[], get:async()=>null, create:async()=>({}), update:async()=>({}), delete:async()=>({}) }) }), integrations:{ Core:{ UploadFile:async()=>({ file_url:'' }) } } };
+
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -7,30 +9,8 @@ import { Label } from "@/components/ui/label";
 import { UserPlus, Mail, Lock, Loader2 } from "lucide-react";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import AuthLayout from "@/components/AuthLayout";
-import ProviderIcon from "@/components/ProviderIcon";
+import GoogleIcon from "@/components/GoogleIcon";
 import { toast } from "@/components/ui/use-toast";
-
-const db =  (globalThis).__APP_DB__ || {
-  auth: {
-    isAuthenticated: async () => false,
-    me: async () => null,
-    register: async () => {
-      throw new Error("Auth is unavailable");
-    },
-    verifyOtp: async () => {
-      throw new Error("OTP verification is unavailable");
-    },
-    resendOtp: async () => {
-      throw new Error("OTP resend is unavailable");
-    },
-    setToken: async () => {},
-    loginWithProvider: async () => {
-      throw new Error("Auth provider is unavailable");
-    },
-  },
-  entities: new Proxy({}, { get: () => ({ filter: async () => [], get: async () => null, create: async () => ({}), update: async () => ({}), delete: async () => ({}) }) }),
-  integrations: { Core: { UploadFile: async () => ({ file_url: '' }) } },
-};
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -41,23 +21,7 @@ export default function Register() {
   const [showOtp, setShowOtp] = useState(false);
   const [otpCode, setOtpCode] = useState("");
 
-  const handleEmailChange = (/** @type {React.ChangeEvent<HTMLInputElement>} */ e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (/** @type {React.ChangeEvent<HTMLInputElement>} */ e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleConfirmChange = (/** @type {React.ChangeEvent<HTMLInputElement>} */ e) => {
-    setConfirmPassword(e.target.value);
-  };
-
-  const handleOtpChange = (/** @type {React.ChangeEvent<HTMLInputElement>} */ e) => {
-    setOtpCode(e.target.value);
-  };
-
-  const handleSubmit = async (/** @type {React.FormEvent<HTMLFormElement>} */ e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     if (password !== confirmPassword) {
@@ -69,7 +33,7 @@ export default function Register() {
       await db.auth.register({ email, password });
       setShowOtp(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : String(err) || "Registration failed");
+      setError(err.message || "Registration failed");
     } finally {
       setLoading(false);
     }
@@ -85,7 +49,7 @@ export default function Register() {
       }
       window.location.href = "/";
     } catch (err) {
-      setError(err instanceof Error ? err.message : String(err) || "Invalid verification code");
+      setError(err.message || "Invalid verification code");
     } finally {
       setLoading(false);
     }
@@ -97,20 +61,15 @@ export default function Register() {
       await db.auth.resendOtp(email);
       toast({
         title: "Code sent",
- description: "Check your email for the new code.",
+        description: "Check your email for the new code.",
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : String(err) || "Failed to resend code");
+      setError(err.message || "Failed to resend code");
     }
   };
 
-  const handleProviderLogin = async () => {
-    setError("");
-    try {
-      await db.auth.loginWithProvider("nvidia", "/");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : String(err) || "Provider login failed");
-    }
+  const handleGoogle = () => {
+    db.auth.loginWithProvider("google", "/");
   };
 
   if (showOtp) {
@@ -129,7 +88,7 @@ export default function Register() {
           <InputOTP
             maxLength={6}
             value={otpCode}
-            onChange={handleOtpChange}
+            onChange={setOtpCode}
             autoFocus
             autoComplete="one-time-code"
           >
@@ -184,10 +143,10 @@ export default function Register() {
       <Button
         variant="outline"
         className="w-full h-12 text-sm font-medium mb-6"
-        onClick={handleProviderLogin}
+        onClick={handleGoogle}
       >
-        <ProviderIcon className="w-5 h-5 mr-2" />
-        Continue with Nvidia
+        <GoogleIcon className="w-5 h-5 mr-2" />
+        Continue with Google
       </Button>
 
       <div className="relative mb-6">
@@ -217,7 +176,7 @@ export default function Register() {
               autoFocus
               placeholder="you@example.com"
               value={email}
-              onChange={handleEmailChange}
+              onChange={(e) => setEmail(e.target.value)}
               className="pl-10 h-12"
               required
             />
@@ -233,7 +192,7 @@ export default function Register() {
               autoComplete="new-password"
               placeholder="••••••••"
               value={password}
-              onChange={handlePasswordChange}
+              onChange={(e) => setPassword(e.target.value)}
               className="pl-10 h-12"
               required
             />
@@ -249,7 +208,7 @@ export default function Register() {
               autoComplete="new-password"
               placeholder="••••••••"
               value={confirmPassword}
-              onChange={handleConfirmChange}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               className="pl-10 h-12"
               required
             />

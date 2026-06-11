@@ -1,59 +1,64 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
-const Q = [
+const faqs = [
   {
-    q: 'Do taxes mean you lose all your money?'
-    ,
-    a: 'No. Taxes help the government pay for services. Some rules can reduce your tax bill.'
+    q: "What are taxes and why do we pay them?",
+    a: "Taxes are payments we make to the government. They fund public services like schools, roads, hospitals, fire departments, and parks. Without taxes, these services wouldn't exist.",
   },
   {
-    q: 'Are “write-offs” the same as “free money”?'
-    ,
-    a: 'No. A write-off (in the learning sense) can reduce taxable income, but you still have to follow rules.'
+    q: "Do kids have to pay taxes?",
+    a: "If you earn money (from a job, investments, or a business), you might have to file a tax return. In 2024, if you earned more than $13,850 from a job, you need to file.",
   },
   {
-    q: 'Can I do tax tricks without rules?'
-    ,
-    a: 'No. The games are for learning. Real life needs correct info and permission from adults.'
+    q: "What is the IRS?",
+    a: "The IRS (Internal Revenue Service) is the government agency that collects taxes and enforces tax laws. They process tax returns and issue refunds.",
   },
   {
-    q: 'Which country tax rules do you use?'
-    ,
-    a: 'This site uses simple ideas (kid edition). Different places have different rules.'
+    q: "What's the difference between a deduction and a credit?",
+    a: "A deduction reduces your taxable income (how much income you're taxed on). A credit reduces your actual tax bill dollar-for-dollar. Credits are generally more valuable.",
+  },
+  {
+    q: "What happens if you don't pay taxes?",
+    a: "Not paying taxes can lead to penalties, interest charges, and even legal trouble. The government can garnish wages or place liens on property.",
+  },
+  {
+    q: "What is a W-2 form?",
+    a: "A W-2 is a form your employer sends you showing how much you earned and how much tax was withheld from your paychecks. You need it to file your tax return.",
   },
 ];
 
 export default function TaxesKidsFAQ() {
   return (
-    <section className="border-b-2 border-foreground">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 md:py-14">
-        <div className="border-2 border-foreground rounded-3xl p-6 md:p-8 bg-background">
-          <p className="text-accent text-[11px] font-mono tracking-[0.3em]">KIDS FAQ</p>
-          <h2 className="font-heading font-black text-3xl md:text-5xl uppercase tracking-[-0.05em] mt-3">Common questions</h2>
-
-          <div className="mt-6 grid gap-3 md:grid-cols-2">
-            {Q.map((item, i) => (
-              <motion.div
-                key={item.q}
-                initial={{ opacity: 0, y: 14 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.06 }}
-                className="border-2 border-foreground rounded-2xl p-4"
-              >
-                <div className="font-heading font-black uppercase tracking-[-0.03em]">{item.q}</div>
-                <div className="mt-2 text-sm font-mono text-muted-foreground leading-relaxed">{item.a}</div>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="mt-6 text-[11px] font-mono text-muted-foreground leading-relaxed">
-            Safety note: This is educational. It’s not legal, tax, or financial advice.
-          </div>
-        </div>
-      </div>
-    </section>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      className="max-w-3xl"
+    >
+      <Accordion type="single" collapsible className="space-y-3">
+        {faqs.map((faq, i) => (
+          <AccordionItem
+            key={i}
+            value={`faq-${i}`}
+            className="bg-card border border-border/50 rounded-xl px-6 data-[state=open]:border-primary/30 transition-colors"
+          >
+            <AccordionTrigger className="text-left font-display font-medium text-base hover:no-underline hover:text-primary transition-colors py-5">
+              {faq.q}
+            </AccordionTrigger>
+            <AccordionContent className="text-muted-foreground leading-relaxed pb-5">
+              {faq.a}
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </motion.div>
   );
 }
-

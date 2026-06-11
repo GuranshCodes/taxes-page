@@ -1,53 +1,57 @@
-import React from 'react';
+import React from "react";
+import { Link } from "react-router-dom";
+import { DollarSign } from "lucide-react";
 
 export default function TaxesFooter() {
   return (
-    <footer className="border-t-2 border-foreground mt-12 bg-[radial-gradient(ellipse_at_top,rgba(136,100,250,0.16),transparent_60%)]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <footer className="border-t border-border/50 bg-card/50">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+        <div className="flex flex-col md:flex-row justify-between items-start gap-8">
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-3 h-3 bg-accent" />
-              <div className="font-heading font-black text-sm uppercase tracking-[-0.03em]">TAX QUEST</div>
-            </div>
-            <p className="text-[11px] font-mono text-muted-foreground leading-relaxed">
-              Built for learning. Not legal or financial advice.
+            <Link to="/" className="flex items-center gap-2.5 mb-4">
+              <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
+                <DollarSign className="w-4 h-4 text-primary" />
+              </div>
+              <span className="font-display font-bold text-foreground">
+                Money<span className="text-primary">Wise</span>
+              </span>
+            </Link>
+            <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
+              Making financial literacy fun and accessible through interactive
+              learning and games.
             </p>
           </div>
 
-          <div>
-            <div className="text-[10px] font-mono text-muted-foreground tracking-wider mb-4">QUICK LINKS</div>
-            <div className="space-y-2 text-[11px] font-mono">
-              {[
-                { label: 'Home', href: '/' },
-                { label: 'What are taxes?', href: '/taxes-about' },
-                { label: 'How to save', href: '/taxes-save' },
-                { label: 'Business write-offs', href: '/taxes-business' },
-                { label: 'Games', href: '/games' },
-              ].map((x) => (
-                <a key={x.href} className="block hover:text-accent transition-colors" href={x.href}>
-                  → {x.label}
-                </a>
-              ))}
+          <div className="flex gap-12">
+            <div>
+              <h4 className="text-xs font-semibold tracking-[0.2em] uppercase text-muted-foreground mb-4">
+                Learn
+              </h4>
+              <div className="space-y-2.5">
+                <Link to="/taxes-about" className="block text-sm text-foreground/70 hover:text-primary transition-colors">About Taxes</Link>
+                <Link to="/taxes-save" className="block text-sm text-foreground/70 hover:text-primary transition-colors">Save Money</Link>
+                <Link to="/taxes-business" className="block text-sm text-foreground/70 hover:text-primary transition-colors">Business</Link>
+              </div>
             </div>
-          </div>
-
-          <div>
-            <div className="text-[10px] font-mono text-muted-foreground tracking-wider mb-4">GRADE 8 CHALLENGE</div>
-            <p className="text-[11px] font-mono text-muted-foreground leading-relaxed">
-              Finish a game, then try the mini calculator.
-            </p>
+            <div>
+              <h4 className="text-xs font-semibold tracking-[0.2em] uppercase text-muted-foreground mb-4">
+                Play
+              </h4>
+              <div className="space-y-2.5">
+                <Link to="/games/treasure" className="block text-sm text-foreground/70 hover:text-primary transition-colors">Treasure Hunt</Link>
+                <Link to="/games/credit-catcher" className="block text-sm text-foreground/70 hover:text-primary transition-colors">Credit Catcher</Link>
+                <Link to="/games/quiz-sprint" className="block text-sm text-foreground/70 hover:text-primary transition-colors">Quiz Sprint</Link>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="border-t-2 border-foreground mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-[10px] font-mono text-muted-foreground">
-            © {new Date().getFullYear()} TAX QUEST. ALL RIGHTS RESERVED.
+        <div className="mt-12 pt-8 border-t border-border/30 text-center">
+          <p className="text-xs text-muted-foreground/60">
+            The MoneyWise Project — A Financial Literacy Learning Experience
           </p>
-          <p className="text-[10px] font-mono text-accent">Let’s learn taxes.</p>
         </div>
       </div>
     </footer>
   );
 }
-

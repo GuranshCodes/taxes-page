@@ -1,177 +1,236 @@
-import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Shuffle, CheckCircle2, XCircle } from 'lucide-react';
- 
-const BUCKETS = [
-  { key: 'deductible', label: 'Could be deductible' },
-  { key: 'credit', label: 'Credit-ish (reduces tax bill)' },
-  { key: 'no', label: 'Probably not' },
+import React, { useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Gem, Check, X, RotateCcw, Trophy } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const scenarios = [
+  {
+    title: "Working From Home",
+    items: [
+      { name: "Home office rent portion", deductible: true },
+      { name: "Netflix subscription", deductible: false },
+      { name: "Internet bill (business %)", deductible: true },
+      { name: "Office desk & chair", deductible: true },
+      { name: "Personal groceries", deductible: false },
+      { name: "Computer for work", deductible: true },
+    ],
+  },
+  {
+    title: "Starting a Business",
+    items: [
+      { name: "Business license fees", deductible: true },
+      { name: "Marketing & advertising", deductible: true },
+      { name: "Personal vacation", deductible: false },
+      { name: "Professional development", deductible: true },
+      { name: "Pet supplies", deductible: false },
+      { name: "Business insurance", deductible: true },
+    ],
+  },
+  {
+    title: "Freelance Designer",
+    items: [
+      { name: "Adobe Creative Suite", deductible: true },
+      { name: "Client lunch meeting", deductible: true },
+      { name: "Gaming console", deductible: false },
+      { name: "Portfolio website hosting", deductible: true },
+      { name: "Movie tickets", deductible: false },
+      { name: "Mileage to client office", deductible: true },
+    ],
+  },
+  {
+    title: "Real Estate Investor",
+    items: [
+      { name: "Mortgage interest on rental", deductible: true },
+      { name: "Property repairs", deductible: true },
+      { name: "Personal clothing", deductible: false },
+      { name: "Property management fees", deductible: true },
+      { name: "Gym membership", deductible: false },
+      { name: "Depreciation expense", deductible: true },
+    ],
+  },
+  {
+    title: "Rideshare Driver",
+    items: [
+      { name: "Car mileage (work trips)", deductible: true },
+      { name: "Phone mount & accessories", deductible: true },
+      { name: "Personal road trip", deductible: false },
+      { name: "Car insurance (work %)", deductible: true },
+      { name: "Family vacation flights", deductible: false },
+      { name: "Water bottles for passengers", deductible: true },
+    ],
+  },
+  {
+    title: "Small Restaurant Owner",
+    items: [
+      { name: "Food inventory costs", deductible: true },
+      { name: "Staff wages", deductible: true },
+      { name: "Owner personal meals", deductible: false },
+      { name: "Kitchen equipment", deductible: true },
+      { name: "Personal credit card bills", deductible: false },
+      { name: "Restaurant rent", deductible: true },
+    ],
+  },
+  {
+    title: "Online Content Creator",
+    items: [
+      { name: "Camera and lighting gear", deductible: true },
+      { name: "Editing software subscription", deductible: true },
+      { name: "Personal clothes (not on camera)", deductible: false },
+      { name: "Studio rent", deductible: true },
+      { name: "Grocery haul for fun", deductible: false },
+      { name: "Microphone and audio gear", deductible: true },
+    ],
+  },
+  {
+    title: "Medical Professional",
+    items: [
+      { name: "Medical board license fees", deductible: true },
+      { name: "Continuing education courses", deductible: true },
+      { name: "Personal health club", deductible: false },
+      { name: "Medical journals & textbooks", deductible: true },
+      { name: "Spouse birthday gift", deductible: false },
+      { name: "Malpractice insurance", deductible: true },
+    ],
+  },
 ];
- 
-const ITEMS = [
-  { id: 'supplies', label: 'Business supplies for work', bucket: 'deductible' },
-  { id: 'vacation', label: 'Vacation with family', bucket: 'no' },
-  { id: 'software', label: 'Work software subscription', bucket: 'deductible' },
-  { id: 'school_donation', label: 'Donation to a charity (sometimes a credit)', bucket: 'credit' },
-  { id: 'personal_movie', label: 'Movie ticket for personal time', bucket: 'no' },
-  { id: 'marketing', label: 'Ad/marketing for your business', bucket: 'deductible' },
-];
- 
-/** @typedef {{ id: string, label: string, bucket: string }} Item */
-/** @typedef {{ id: string, correct: boolean }} Picked */
- 
-/** @param {Item[]} arr */
-function shuffleArray(arr) {
-  const copy = [...arr];
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
- 
+
 export default function TaxTreasureHuntGame() {
-  const [seed, setSeed] = React.useState(1);
-  /** @type {[Picked | null, React.Dispatch<React.SetStateAction<Picked | null>>]} */
-  const [picked, setPicked] = React.useState(/** @type {Picked | null} */ (null));
-  const [score, setScore] = React.useState(0);
-  const [done, setDone] = React.useState(false);
-  /** @type {[string[], React.Dispatch<React.SetStateAction<string[]>>]} */
-  const [usedIds, setUsedIds] = React.useState(/** @type {string[]} */ ([]));
- 
-  const items = React.useMemo(() => shuffleArray(ITEMS), [seed]);
-  const remaining = items.filter((i) => !usedIds.includes(i.id));
-  const current = remaining[0];
- 
-  React.useEffect(() => {
-    if (remaining.length === 0) setDone(true);
-  }, [remaining.length]);
- 
-  /** @param {string} bucketKey */
-  const choose = (bucketKey) => {
-    if (!current) return;
-    const correct = bucketKey === current.bucket;
-    setPicked({ id: current.id, correct });
-    setUsedIds((prev) => [...prev, current.id]);
-    setScore((s) => s + (correct ? 100 : 0));
- 
-    window.setTimeout(() => {
-      setPicked(null);
-    }, 700);
+  const [scenarioIdx, setScenarioIdx] = useState(0);
+  const [selected, setSelected] = useState(new Set());
+  const [revealed, setRevealed] = useState(false);
+  const [totalScore, setTotalScore] = useState(0);
+  const [finished, setFinished] = useState(false);
+
+  const scenario = scenarios[scenarioIdx];
+  const correctItems = scenario.items.filter((i) => i.deductible).map((i) => i.name);
+
+  const toggle = (name) => {
+    if (revealed) return;
+    setSelected((prev) => {
+      const next = new Set(prev);
+      next.has(name) ? next.delete(name) : next.add(name);
+      return next;
+    });
   };
- 
-  const reset = () => {
-    setSeed((x) => x + 1);
-    setPicked(null);
-    setScore(0);
-    setDone(false);
-    setUsedIds([]);
+
+  const checkAnswers = () => {
+    setRevealed(true);
+    let score = 0;
+    scenario.items.forEach((item) => {
+      const wasSelected = selected.has(item.name);
+      if (item.deductible && wasSelected) score += 10;
+      if (!item.deductible && !wasSelected) score += 5;
+    });
+    setTotalScore((prev) => prev + score);
   };
- 
+
+  const nextScenario = () => {
+    if (scenarioIdx < scenarios.length - 1) {
+      setScenarioIdx((prev) => prev + 1);
+      setSelected(new Set());
+      setRevealed(false);
+    } else {
+      setFinished(true);
+    }
+  };
+
+  const restart = () => {
+    setScenarioIdx(0);
+    setSelected(new Set());
+    setRevealed(false);
+    setTotalScore(0);
+    setFinished(false);
+  };
+
+  if (finished) {
+    const max = scenarios.reduce((acc, s) => acc + s.items.filter(i => i.deductible).length * 10 + s.items.filter(i => !i.deductible).length * 5, 0);
+    return (
+      <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-16">
+        <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-6">
+          <Trophy className="w-10 h-10 text-primary" />
+        </div>
+        <h2 className="font-display font-bold text-3xl mb-2">Hunt Complete!</h2>
+        <p className="text-muted-foreground mb-2">You scored</p>
+        <p className="font-display font-bold text-5xl text-primary mb-1">{totalScore}</p>
+        <p className="text-muted-foreground text-sm mb-8">out of {max} points</p>
+        <Button onClick={restart} variant="outline" className="gap-2">
+          <RotateCcw className="w-4 h-4" /> Play Again
+        </Button>
+      </motion.div>
+    );
+  }
+
   return (
-    <div className="border-2 border-foreground rounded-3xl p-6 md:p-7 bg-background">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+    <div>
+      <div className="flex items-center justify-between mb-8">
         <div>
-          <p className="text-accent text-[11px] font-mono tracking-[0.3em]">TAX TREASURE HUNT</p>
-          <h3 className="font-heading font-black text-3xl uppercase tracking-[-0.05em] mt-2">Sort the items!</h3>
-          <p className="mt-2 text-sm font-mono text-muted-foreground leading-relaxed">
-            Drag is optional—just tap a bucket. Grade 8 mode: quick learning, big fun.
-          </p>
+          <span className="text-xs font-semibold tracking-[0.2em] uppercase text-primary/70">
+            Scenario {scenarioIdx + 1} of {scenarios.length}
+          </span>
+          <h3 className="font-display font-bold text-2xl mt-1">{scenario.title}</h3>
+          <p className="text-sm text-muted-foreground mt-1">Tap the items you think are tax deductible</p>
         </div>
- 
-        <div className="flex items-center gap-3">
-          <div className="border-2 border-foreground rounded-2xl px-4 py-3">
-            <div className="text-[10px] font-mono text-muted-foreground tracking-wider">SCORE</div>
-            <div className="font-heading font-black text-2xl">{score}</div>
-          </div>
-          <button
-            onClick={reset}
-            className="border-2 border-foreground hover:bg-foreground hover:text-background transition-colors rounded-2xl px-4 py-3 inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider"
-          >
-            <Shuffle size={16} />
-            Reset
-          </button>
+        <div className="text-right">
+          <span className="text-xs text-muted-foreground">Score</span>
+          <p className="font-display font-bold text-2xl text-primary">{totalScore}</p>
         </div>
       </div>
- 
-      <div className="mt-6 grid lg:grid-cols-12 gap-4">
-        <div className="lg:col-span-5 border-2 border-foreground rounded-3xl p-5">
-          <div className="text-[10px] font-mono text-muted-foreground tracking-wider">ITEM TO SORT</div>
-          <AnimatePresence mode="wait">
-            {done ? (
-              <motion.div
-                key="done"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="mt-3"
+
+      <div className="grid sm:grid-cols-2 gap-3 mb-8">
+        <AnimatePresence>
+          {scenario.items.map((item) => {
+            const isSelected = selected.has(item.name);
+            let bg = "bg-card border-border/50";
+            let icon = null;
+
+            if (revealed) {
+              if (item.deductible && isSelected) {
+                bg = "bg-emerald-500/10 border-emerald-500/40";
+                icon = <Check className="w-4 h-4 text-emerald-400" />;
+              } else if (item.deductible && !isSelected) {
+                bg = "bg-yellow-500/10 border-yellow-500/30";
+                icon = <Gem className="w-4 h-4 text-yellow-400" />;
+              } else if (!item.deductible && isSelected) {
+                bg = "bg-red-500/10 border-red-500/30";
+                icon = <X className="w-4 h-4 text-red-400" />;
+              } else {
+                bg = "bg-card border-border/30";
+                icon = <Check className="w-4 h-4 text-muted-foreground/40" />;
+              }
+            } else if (isSelected) {
+              bg = "bg-primary/10 border-primary/40";
+            }
+
+            return (
+              <motion.button
+                key={item.name}
+                layout
+                onClick={() => toggle(item.name)}
+                className={`flex items-center justify-between p-4 rounded-xl border text-left transition-all duration-300 ${bg} ${
+                  !revealed ? "hover:border-primary/30 cursor-pointer" : "cursor-default"
+                }`}
               >
-                <div className="font-heading font-black text-2xl">Mission complete!</div>
-                <div className="mt-2 text-sm font-mono text-muted-foreground">
-                  Your treasure score: {score}
-                </div>
-              </motion.div>
-            ) : current ? (
-              <motion.div
-                key={current.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="mt-3"
-              >
-                <div className="font-heading font-black text-2xl">{current.label}</div>
-                <div className="mt-4">
-                  <div className="flex items-center gap-3 text-sm font-mono text-muted-foreground">
-                    <span>Tap a bucket:</span>
-                    <span className="text-foreground font-bold">{remaining.length}</span>
-                    <span>left</span>
-                  </div>
-                </div>
-              </motion.div>
-            ) : null}
-          </AnimatePresence>
- 
-          <AnimatePresence>
-            {picked && (
-              <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                className="mt-4 flex items-center gap-2"
-              >
-                {picked.correct ? (
-                  <CheckCircle2 className="text-accent" size={18} />
-                ) : (
-                  <XCircle className="text-destructive" size={18} />
+                <span className="text-sm font-medium">{item.name}</span>
+                {icon}
+                {!revealed && isSelected && (
+                  <div className="w-2.5 h-2.5 rounded-full bg-primary" />
                 )}
-                <div className="text-sm font-mono text-muted-foreground">
-                  {picked.correct ? 'Nice! +100' : 'Close—try the next one!'}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
- 
-        <div className="lg:col-span-7 grid sm:grid-cols-3 gap-4">
-          {BUCKETS.map((b) => (
-            <button
-              key={b.key}
-              disabled={done || !current}
-              onClick={() => choose(b.key)}
-              className="border-2 border-foreground rounded-3xl p-4 text-left hover:bg-foreground hover:text-background transition-colors disabled:opacity-50 disabled:hover:bg-background"
-            >
-              <div className="text-accent text-[11px] font-mono tracking-wider">BUCKET</div>
-              <div className="font-heading font-black text-lg uppercase tracking-[-0.03em] mt-2">{b.label}</div>
-              <div className="mt-2 text-sm font-mono text-muted-foreground">
-                {b.key === 'deductible' ? 'Work-related costs' : b.key === 'credit' ? 'Reduces the bill' : 'Not related (usually)'}
-              </div>
-            </button>
-          ))}
-        </div>
+              </motion.button>
+            );
+          })}
+        </AnimatePresence>
       </div>
- 
-      <div className="mt-5 border-t-2 border-foreground pt-4 text-[11px] font-mono text-muted-foreground leading-relaxed">
-        Learning-only: your goal is to practice the idea of sorting examples, not to claim legal advice.
+
+      <div className="flex justify-end gap-3">
+        {!revealed ? (
+          <Button onClick={checkAnswers} className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2">
+            <Gem className="w-4 h-4" /> Check Answers
+          </Button>
+        ) : (
+          <Button onClick={nextScenario} className="bg-primary text-primary-foreground hover:bg-primary/90">
+            {scenarioIdx < scenarios.length - 1 ? "Next Scenario →" : "See Results →"}
+          </Button>
+        )}
       </div>
     </div>
   );
