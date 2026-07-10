@@ -1,77 +1,90 @@
+<div align="center">
+
+<img width="100%" src="https://capsule-render.vercel.app/api?type=waving&height=260&color=gradient&text=Taxes%20Page&fontSize=52&fontAlignY=40&desc=Educational%20Tax%20Calculation%20Tool&descAlignY=62"/>
+
 <h1>Taxes Page</h1>
 
-<p>
-A web-based financial literacy project that helps users understand and calculate basic tax values through a simple, interactive interface.
-</p>
+<img src="https://readme-typing-svg.demolab.com?font=Poppins&weight=600&size=24&duration=2500&pause=1000&color=36BCF7&center=true&vCenter=true&width=650&lines=Understand+Tax+Calculations;Interactive+Financial+Learning;Powered+by+React+%2B+Vite;ClassResources+Project"/>
 
-<hr>
+<br><br>
 
-<h2>Live Website</h2>
+<a href="https://taxes.classresources.ca/"><img src="https://img.shields.io/badge/Live%20Website-Visit-00C853?style=for-the-badge"></a>
+<a href="https://github.com/GuranshCodes/taxes-page"><img src="https://img.shields.io/badge/Repository-GitHub-181717?style=for-the-badge&logo=github"></a>
 
-<p>
-<a href="https://taxes.classresources.ca/" target="_blank">
-https://taxes.classresources.ca/
-</a>
-</p>
+<br><br>
 
-<h2>Overview</h2>
+<img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black">
+<img src="https://img.shields.io/badge/TailwindCSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white">
+<img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white">
+<img src="https://img.shields.io/badge/Educational-Tool-blue?style=for-the-badge">
+<img src="https://komarev.com/ghpvc/?username=GuranshCodes&style=for-the-badge">
 
-<p>
-The Taxes Page is part of a broader set of educational financial literacy projects. It is designed to demonstrate how tax calculations can be handled in a clean, interactive, and user-friendly web interface.
-</p>
+</div>
 
-<p>
-This project focuses on practical learning by combining form inputs, real-time calculations, and a responsive UI built with modern front-end tools.
-</p>
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&height=3&color=gradient"/>
 
-<h2>Features</h2>
+<h2>About</h2>
+<p>The Taxes Page is an interactive educational tool designed to demystify tax calculations. As part of the <b>ClassResources</b> series, this project enables students to input values and observe real-time tax outputs, bridging the gap between theoretical percentage math and practical financial literacy.</p>
 
-<ul>
-  <li>Simple and responsive user interface</li>
-  <li>Real-time tax calculation based on input values</li>
-  <li>Clean and minimal design</li>
-  <li>Fast performance with Vite</li>
-  <li>Component-based structure</li>
-</ul>
+<img width="100%" src="https://capsule-render.vercel.app/api?type=rect&height=3&color=gradient"/>
 
-<h2>Built With</h2>
+<h2>Key Features</h2>
+<table align="center">
+  <tr>
+    <th align="left">Feature</th>
+    <th align="left">Description</th>
+  </tr>
+  <tr>
+    <td>Real-time Math</td>
+    <td>Instant calculation on input</td>
+  </tr>
+  <tr>
+    <td>Responsive UI</td>
+    <td>Clean layout for desktop & mobile</td>
+  </tr>
+  <tr>
+    <td>Modern Stack</td>
+    <td>Optimized performance with Vite</td>
+  </tr>
+  <tr>
+    <td>Educational</td>
+    <td>Focused on financial literacy</td>
+  </tr>
+</table>
 
-<ul>
-  <li>React</li>
-  <li>Vite</li>
-  <li>JavaScript</li>
-  <li>Tailwind CSS</li>
-  <li>PostCSS</li>
-</ul>
+<h2>Tech Stack</h2>
+<div align="center">
+  <img src="https://skillicons.dev/icons?i=react,vite,js,tailwind,vscode,git,github"/>
+</div>
 
 <h2>Project Structure</h2>
-
-<pre><code>
-taxes-page/
-├── public/
-├── src/
-├── .gitignore
-├── components.json
-├── eslint.config.js
-├── index.html
-├── jsconfig.json
-├── package-lock.json
-├── package.json
-├── postcss.config.js
+<pre><code>taxes-page/
+├── src/            # Application components and logic
+├── public/         # Static files
 ├── tailwind.config.js
-└── vite.config.js
-</code></pre>
+├── vite.config.js
+└── package.json    # Project dependencies</code></pre>
 
-<h2>How to Use</h2>
+<h2>Installation</h2>
+<pre><code>git clone https://github.com/GuranshCodes/taxes-page.git
+cd taxes-page
+npm install
+npm run dev</code></pre>
 
+<h2>Repository Activity</h2>
+<div align="center">
+  <img height="170" src="https://github-readme-stats.vercel.app/api?username=GuranshCodes&show_icons=true&theme=tokyonight"/>
+  <img height="170" src="https://github-readme-streak-stats.herokuapp.com/?user=GuranshCodes&theme=tokyonight"/>
+  <img width="100%" src="https://github-readme-activity-graph.vercel.app/graph?username=GuranshCodes&theme=tokyo-night"/>
+</div>
+
+<h2>Contact</h2>
 <ul>
-  <li>Open the live website or run locally</li>
-  <li>Enter values into the input fields</li>
-  <li>View calculated tax results instantly</li>
+  <li><strong>Website:</strong> <a href="https://taxes.classresources.ca/">taxes.classresources.ca</a></li>
+  <li><strong>GitHub:</strong> <a href="https://github.com/GuranshCodes">github.com/GuranshCodes</a></li>
 </ul>
 
-<h2>Purpose</h2>
-
-<p>
-This project was built as part of a financial literacy learning series to help students understand how taxes and percentages work in real-world applications using interactive web tools.
-</p>
+<div align="center">
+  <p>Built by <b>GuranshCodes</b></p>
+  <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&section=footer&height=180&color=gradient"/>
+</div>
