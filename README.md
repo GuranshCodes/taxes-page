@@ -24,7 +24,7 @@
 <img width="100%" src="https://capsule-render.vercel.app/api?type=rect&height=3&color=gradient"/>
 
 <h2>About</h2>
-<p>The Taxes Page is an interactive educational tool designed to demystify tax calculations. As part of the <b>ClassResources</b> series, this project enables students to input values and observe real-time tax outputs, bridging the gap between theoretical percentage math and practical financial literacy.</p>
+<p>The Taxes Page is an interactive educational tool designed to help people with tax calculations. As part of the <b>ClassResources</b> series, this project enables students to input values and observe real time tax outputs, bridging the gap between theoretical percentage math and practical financial literacy.</p>
 
 <img width="100%" src="https://capsule-render.vercel.app/api?type=rect&height=3&color=gradient"/>
 
